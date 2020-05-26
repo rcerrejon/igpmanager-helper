@@ -1,24 +1,82 @@
 import React from 'react';
-import logo from './logo.svg';
+import moment from 'moment'
+import { Image, Button, Icon, Table, Header } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+import monoplaza from './monoplaza.gif';
+import { circuits } from './Circuits'
+import { useWeatherByLocation } from './Weather'
 import './App.css';
 
+
+const getNextCircuit = () => {
+  const now = moment().add(2, 'hours').unix()
+
+  let nextCircuit = circuits.default
+
+  if (now < circuits.usa.finishDate) {
+    nextCircuit = circuits.usa;
+  } else if (now < circuits.france.finishDate) {
+    nextCircuit = circuits.france;
+  } else if (now < circuits.italy.finishDate) {
+    nextCircuit = circuits.italy;
+  } else if (now < circuits.germany.finishDate) {
+    nextCircuit = circuits.germany;
+  } else if (now < circuits.belgium.finishDate) {
+    nextCircuit = circuits.belgium;
+  } else if (now < circuits.austria.finishDate) {
+    nextCircuit = circuits.austria;
+  }
+
+  return nextCircuit
+}
+
+
+
 function App() {
+  const nextCircuit = getNextCircuit();
+  const dateToString = moment.unix(nextCircuit.startDate).format("DD/MM/YYYY");
+  const currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.startDate);
+console.log(`✳️ currentWeater (${typeof currentWeater}): `, currentWeater)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="App-header">
+        <Header as='h1'>iGP Manager - Previsión</Header>
+        <Header as='h2'>Liga Waranflai</Header>
+          <Image src={monoplaza} alt="logo" />
+          <Header as='h3'>Próxima carrera</Header>
+          <Button animated>
+            <Button.Content visible>Vamonos</Button.Content>
+            <Button.Content hidden>
+              <Icon name='car' />
+            </Button.Content>
+          </Button>
+        <Table celled inverted selectable className="table">
+          <Table.Header>
+            <Table.Row>
+          <Table.HeaderCell>{currentWeater.title}</Table.HeaderCell>
+              <Table.HeaderCell>{currentWeater.dateCircuit} 20:00</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>Tiempo</Table.Cell>
+              <Table.Cell>{currentWeater.description}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>Temperatura</Table.Cell>
+              <Table.Cell>{currentWeater.temperature}°</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>Precipitaciones</Table.Cell>
+              <Table.Cell>{currentWeater.precipitation}%</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>Densidad Lluvia</Table.Cell>
+              <Table.Cell>{currentWeater.density}mm</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </div>
     </div>
   );
 }
