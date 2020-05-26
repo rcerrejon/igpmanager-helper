@@ -1,9 +1,10 @@
 import React from 'react';
 import moment from 'moment'
-import { Image, Button, Icon, Table, Header, Modal } from 'semantic-ui-react'
+import { Image, Button, Icon, Table, Header, Modal, Flag, Segment } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import monoplaza from './monoplaza.gif';
 import { circuits } from './Circuits'
+import { localizedText } from './Constant'
 import { useWeatherByLocation } from './Weather'
 import './App.css';
 
@@ -33,15 +34,33 @@ const getNextCircuit = () => {
 function App() {
   const nextCircuit = getNextCircuit();
   const dateToString = moment.unix(nextCircuit.startDate).format("DD/MM/YYYY");
-  const currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.startDate);
+  let currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.startDate, localizedText.getLanguage());
+
+  // force update on change Language
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   return (
     <div className="App">
       <div className="App-header">
-        <Header as='h1'>iGP Manager - Previsión</Header>
-        <Header as='h2'>Liga Waranflai</Header>
+        <Segment className="segment-bg">
+          <Flag className="flags" name='es' onClick={() => {
+              localizedText.setLanguage('es');
+              forceUpdate()
+            }} />
+          <Flag className="flags" name='us' onClick={() => {
+              localizedText.setLanguage('en');
+              forceUpdate()
+            }} />
+          <Flag className="flags" name='de' onClick={() => {
+              localizedText.setLanguage('de');
+              forceUpdate()
+            }} />
+        </Segment>
+        <Header as='h1'>iGP Manager - {localizedText.weather}</Header>
+        <Header as='h2'>{localizedText.league} Waranflai</Header>
           <Image src={monoplaza} alt="logo" />
-          <Header as='h3'>Próxima carrera</Header>
+          <Header as='h3'>{localizedText.nextRace}</Header>
         <Table celled inverted selectable className="table">
           <Table.Header>
             <Table.Row>
@@ -51,19 +70,19 @@ function App() {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.Cell>Tiempo</Table.Cell>
+              <Table.Cell>{localizedText.time}</Table.Cell>
               <Table.Cell>{currentWeater.description}</Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>Temperatura</Table.Cell>
+              <Table.Cell>{localizedText.temperature}</Table.Cell>
               <Table.Cell>{currentWeater.temperature}°</Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>Precipitaciones</Table.Cell>
+              <Table.Cell>{localizedText.precip}</Table.Cell>
               <Table.Cell>{currentWeater.precipitation}%</Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>Densidad Lluvia</Table.Cell>
+              <Table.Cell>{localizedText.density}</Table.Cell>
               <Table.Cell>{currentWeater.density}mm</Table.Cell>
             </Table.Row>
           </Table.Body>
@@ -71,15 +90,15 @@ function App() {
         <Modal
           trigger={
             <Button animated on>
-              <Button.Content visible>Recomendar Neumáticos</Button.Content>
+              <Button.Content visible>{localizedText.modalButton}</Button.Content>
               <Button.Content hidden>
                 <Icon name='car' />
               </Button.Content>
             </Button>
           }
-          header='Dame tokens'
-          content='Si quieres recomendación de neumáticos, dame dinero'
-          actions={[{ key: 'done', content: 'Vale', positive: true }]}
+          header={localizedText.modalButton}
+          content={localizedText.modalDescription}
+          actions={[{ key: 'done', content: 'Ok', positive: true }]}
         />
       </div>
     </div>

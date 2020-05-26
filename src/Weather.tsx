@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { dsUrl, token } from './Constant'
 import axios from 'axios';
 
-export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Number, lon:Number, timestamp: Number) => {
+export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Number, lon:Number, timestamp: Number, lang: string) => {
   const [weatherObject, setWeatherObject] = useState(defaultWeatherObject);
 
   let url = dsUrl;
@@ -10,6 +10,7 @@ export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Num
   url = url.replace('[latitude]', `${lat}`)
   url = url.replace('[longitude]', `${lon}`)
   url = url.replace('[time]', `${timestamp}`)
+  url = url.replace('[lang]', `${lang}`)
 
   useEffect(() => {
     const fetchData = async () => {

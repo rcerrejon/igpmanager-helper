@@ -19,6 +19,14 @@
   width: 90%
 }
 
+.flags {
+  cursor: pointer;
+}
+
+.ui.segment {
+  background: #333;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
