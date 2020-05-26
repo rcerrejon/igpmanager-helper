@@ -19,9 +19,9 @@ export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Num
         title: title,
         dateCircuit: dateCircuit,
         description: result.data.currently.summary,
-        temperature: result.data.currently.temperature,
-        precipitation: result.data.currently.precipProbability,
-        density: result.data.currently.precipIntensity
+        temperature: Math.round(result.data.currently.temperature),
+        precipitation: Math.round(result.data.currently.precipProbability),
+        density: Math.round(result.data.currently.precipIntensity)
       });
     };
     fetchData();
@@ -35,7 +35,7 @@ const defaultWeatherObject = {
   title: 'placeholder',
   dateCircuit: '19/11/1982',
   description: 'hot',
-  temperature: '100°',
-  precipitation: '50%',
-  density: '0.3mm'
+  temperature: 100,
+  precipitation: 50,
+  density: 0.3
 }

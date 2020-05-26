@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment'
-import { Image, Button, Icon, Table, Header } from 'semantic-ui-react'
+import { Image, Button, Icon, Table, Header, Modal } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import monoplaza from './monoplaza.gif';
 import { circuits } from './Circuits'
@@ -15,8 +15,8 @@ const getNextCircuit = () => {
 
   if (now < circuits.usa.finishDate) {
     nextCircuit = circuits.usa;
-  } else if (now < circuits.france.finishDate) {
-    nextCircuit = circuits.france;
+  } else if (now < circuits.singapur.finishDate) {
+    nextCircuit = circuits.singapur;
   } else if (now < circuits.italy.finishDate) {
     nextCircuit = circuits.italy;
   } else if (now < circuits.germany.finishDate) {
@@ -30,13 +30,11 @@ const getNextCircuit = () => {
   return nextCircuit
 }
 
-
-
 function App() {
   const nextCircuit = getNextCircuit();
   const dateToString = moment.unix(nextCircuit.startDate).format("DD/MM/YYYY");
   const currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.startDate);
-console.log(`✳️ currentWeater (${typeof currentWeater}): `, currentWeater)
+
   return (
     <div className="App">
       <div className="App-header">
@@ -44,12 +42,6 @@ console.log(`✳️ currentWeater (${typeof currentWeater}): `, currentWeater)
         <Header as='h2'>Liga Waranflai</Header>
           <Image src={monoplaza} alt="logo" />
           <Header as='h3'>Próxima carrera</Header>
-          <Button animated>
-            <Button.Content visible>Vamonos</Button.Content>
-            <Button.Content hidden>
-              <Icon name='car' />
-            </Button.Content>
-          </Button>
         <Table celled inverted selectable className="table">
           <Table.Header>
             <Table.Row>
@@ -76,6 +68,19 @@ console.log(`✳️ currentWeater (${typeof currentWeater}): `, currentWeater)
             </Table.Row>
           </Table.Body>
         </Table>
+        <Modal
+          trigger={
+            <Button animated on>
+              <Button.Content visible>Recomendar Neumáticos</Button.Content>
+              <Button.Content hidden>
+                <Icon name='car' />
+              </Button.Content>
+            </Button>
+          }
+          header='Dame tokens'
+          content='Si quieres recomendación de neumáticos, dame dinero'
+          actions={[{ key: 'done', content: 'Vale', positive: true }]}
+        />
       </div>
     </div>
   );

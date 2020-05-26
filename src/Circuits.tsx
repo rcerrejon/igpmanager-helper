@@ -15,13 +15,13 @@ export const circuits = {
     lat: 30.1345808,
     lon: -97.6380398
   },
-  france: {
+  singapur: {
     id: 2,
-    title: 'France',
-    startDate: 1589572800,
-    finishDate: 1589576400,
-    lat: 483290,
-    lon: 432890
+    title: 'Singapur',
+    startDate: 1590688800,
+    finishDate: 1590692400,
+    lat: 1.2912748,
+    lon: 103.8635462
   },
   italy: {
     id: 3,
