@@ -10,21 +10,21 @@ import './App.css';
 
 
 const getNextCircuit = () => {
-  const now = moment().add(2, 'hours').unix()
+  const now = moment().unix()
 
   let nextCircuit = circuits.default
 
-  if (now < circuits.usa.finishDate) {
+  if (now < circuits.usa.date) {
     nextCircuit = circuits.usa;
-  } else if (now < circuits.singapur.finishDate) {
+  } else if (now < circuits.singapur.date) {
     nextCircuit = circuits.singapur;
-  } else if (now < circuits.italy.finishDate) {
-    nextCircuit = circuits.italy;
-  } else if (now < circuits.germany.finishDate) {
+  } else if (now < circuits.hungary.date) {
+    nextCircuit = circuits.hungary;
+  } else if (now < circuits.germany.date) {
     nextCircuit = circuits.germany;
-  } else if (now < circuits.belgium.finishDate) {
+  } else if (now < circuits.belgium.date) {
     nextCircuit = circuits.belgium;
-  } else if (now < circuits.austria.finishDate) {
+  } else if (now < circuits.austria.date) {
     nextCircuit = circuits.austria;
   }
 
@@ -33,8 +33,10 @@ const getNextCircuit = () => {
 
 function App() {
   const nextCircuit = getNextCircuit();
-  const dateToString = moment.unix(nextCircuit.startDate).format("DD/MM/YYYY");
-  let currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.startDate, localizedText.getLanguage());
+  console.log(`✳️ nextCircuit (${typeof nextCircuit}): `, nextCircuit)
+  const dateToString = moment.unix(nextCircuit.date).format("DD/MM/YYYY");
+  let currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.date, localizedText.getLanguage());
+  const locationUrl = `http://maps.google.com/maps?q=${nextCircuit.lat},${nextCircuit.lon}`
 
   // force update on change Language
   const [, updateState] = React.useState();
@@ -87,19 +89,23 @@ function App() {
             </Table.Row>
           </Table.Body>
         </Table>
-        <Modal
-          trigger={
-            <Button animated on>
-              <Button.Content visible>{localizedText.modalButton}</Button.Content>
-              <Button.Content hidden>
-                <Icon name='car' />
-              </Button.Content>
+        <div>
+          <Button icon labelPosition='left' onClick={()=> window.open(locationUrl, "_blank")}>
+            <Icon name='pause' />
+            {localizedText.mapButton}
+          </Button>
+          <Modal
+            trigger={
+            <Button icon labelPosition='right'>
+              <Icon name='car' />
+              {localizedText.modalButton}
             </Button>
-          }
-          header={localizedText.modalButton}
-          content={localizedText.modalDescription}
-          actions={[{ key: 'done', content: 'Ok', positive: true }]}
-        />
+            }
+            header={localizedText.modalButton}
+            content={localizedText.modalDescription}
+            actions={[{ key: 'done', content: 'Ok', positive: true }]}
+          />
+        </div>
       </div>
     </div>
   );

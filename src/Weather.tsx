@@ -21,8 +21,8 @@ export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Num
         dateCircuit: dateCircuit,
         description: result.data.currently.summary,
         temperature: Math.round(result.data.currently.temperature),
-        precipitation: Math.round(result.data.currently.precipProbability),
-        density: Math.round(result.data.currently.precipIntensity)
+        precipitation: Math.round(result.data.currently.precipProbability * 100),
+        density: Math.round(result.data.currently.precipIntensity * 100) / 10
       });
     };
     fetchData();
