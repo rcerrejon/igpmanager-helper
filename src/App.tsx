@@ -12,28 +12,19 @@ import './App.css';
 const getNextCircuit = () => {
   const now = moment().unix()
 
-  let nextCircuit = circuits.default
+  let defaultCircuit = circuits[0]
 
-  if (now < circuits.usa.date) {
-    nextCircuit = circuits.usa;
-  } else if (now < circuits.singapur.date) {
-    nextCircuit = circuits.singapur;
-  } else if (now < circuits.hungary.date) {
-    nextCircuit = circuits.hungary;
-  } else if (now < circuits.germany.date) {
-    nextCircuit = circuits.germany;
-  } else if (now < circuits.belgium.date) {
-    nextCircuit = circuits.belgium;
-  } else if (now < circuits.austria.date) {
-    nextCircuit = circuits.austria;
+  for (let circuit of circuits) {
+    if (now < circuit.date) {
+      return circuit
+    }
   }
 
-  return nextCircuit
+  return defaultCircuit
 }
 
 function App() {
   const nextCircuit = getNextCircuit();
-  console.log(`✳️ nextCircuit (${typeof nextCircuit}): `, nextCircuit)
   const dateToString = moment.unix(nextCircuit.date).format("DD/MM/YYYY");
   let currentWeater = useWeatherByLocation(nextCircuit.title, dateToString, nextCircuit.lat, nextCircuit.lon, nextCircuit.date, localizedText.getLanguage());
   const locationUrl = `http://maps.google.com/maps?q=${nextCircuit.lat},${nextCircuit.lon}`
@@ -91,7 +82,7 @@ function App() {
         </Table>
         <div>
           <Button icon labelPosition='left' onClick={()=> window.open(locationUrl, "_blank")}>
-            <Icon name='pause' />
+            <Icon name='location arrow' />
             {localizedText.mapButton}
           </Button>
           <Modal
