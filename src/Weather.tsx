@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react';
-import { dsUrl, token } from './Constant'
+import { dsUrl } from './Constant'
 import axios from 'axios';
 
+/**
+ * Get Weather by Latitude, Longitude and Time
+ *
+ * @param title
+ * @param dateCircuit
+ * @param lat
+ * @param lon
+ * @param timestamp
+ * @param lang
+ */
 export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Number, lon:Number, timestamp: Number, lang: string) => {
   const [weatherObject, setWeatherObject] = useState(defaultWeatherObject);
 
   let url = dsUrl;
-  url = url.replace('[key]', token)
+  url = url.replace('[key]', `${process.env.REACT_APP_API_KEY}`)
   url = url.replace('[latitude]', `${lat}`)
   url = url.replace('[longitude]', `${lon}`)
   url = url.replace('[time]', `${timestamp}`)
@@ -32,6 +42,7 @@ export const useWeatherByLocation = (title: string, dateCircuit: string, lat:Num
   return weatherObject
 }
 
+// Default weather Object Placeholder
 const defaultWeatherObject = {
   title: 'placeholder',
   dateCircuit: '19/11/1982',

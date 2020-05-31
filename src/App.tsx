@@ -8,12 +8,13 @@ import { localizedText } from './Constant'
 import { useWeatherByLocation } from './Weather'
 import './App.css';
 
-
+// get Next Circuit based in actual date and time
 const getNextCircuit = () => {
   const now = moment().unix()
 
   let defaultCircuit = circuits[0]
 
+  // get automatically the next circuit by date
   for (let circuit of circuits) {
     if (now < circuit.date) {
       return circuit
@@ -23,6 +24,7 @@ const getNextCircuit = () => {
   return defaultCircuit
 }
 
+// Main App
 function App() {
   const nextCircuit = getNextCircuit();
   const dateToString = moment.unix(nextCircuit.date).format("DD/MM/YYYY");
@@ -36,6 +38,8 @@ function App() {
   return (
     <div className="App">
       <div className="App-header">
+
+        {/* Language Flags */}
         <Segment className="segment-bg">
           <Flag className="flags" name='es' onClick={() => {
               localizedText.setLanguage('es');
@@ -50,10 +54,14 @@ function App() {
               forceUpdate()
             }} />
         </Segment>
+
+        {/* Header Title */}
         <Header as='h1'>iGP Manager - {localizedText.weather}</Header>
         <Header as='h2'>{localizedText.league} Waranflai</Header>
           <Image src={monoplaza} alt="logo" />
-          <Header as='h3'>{localizedText.nextRace}</Header>
+        <Header as='h3'>{localizedText.nextRace}</Header>
+
+        {/* Weather Table */}
         <Table celled inverted selectable className="table">
           <Table.Header>
             <Table.Row>
@@ -80,6 +88,8 @@ function App() {
             </Table.Row>
           </Table.Body>
         </Table>
+
+        {/* Bottom Options */}
         <div>
           <Button icon labelPosition='left' onClick={()=> window.open(locationUrl, "_blank")}>
             <Icon name='location arrow' />

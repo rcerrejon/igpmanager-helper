@@ -1,8 +1,9 @@
 import LocalizedStrings from 'react-localization';
 
-export const dsUrl = 'https://api.darksky.net/forecast/[key]/[latitude],[longitude],[time]?lang=[lang]&units=si'
-export const token = 'e5423fe27f60299f99456b7dc9b1b262'
+// Generate URL
+export const dsUrl = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/[key]/[latitude],[longitude],[time]?lang=[lang]&units=si'
 
+// Languages Object (spanish, english and german)
 export const localizedText = new LocalizedStrings({
   es:{
     weather: "Previsión Meteorológica",
